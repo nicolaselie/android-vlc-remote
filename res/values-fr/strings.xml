@@ -88,4 +88,7 @@
     <!-- Instructions for using DVD navigation gestures -->
     <string name="dvd_instructions">Glissez dans une direction (haut, bas, gauche, droite) pour naviguer dans les menus du DVD. Tapotez pour sélectionner un élement du menu</string>
 
+    <!-- Menu item to shutdown the computer executing VLC -->
+    <string name="shutdown">Éteindre l\'ordinateur</string>
+    <string name="confirm_shutdown">Êtes-vous sûr ?</string>
 </resources>

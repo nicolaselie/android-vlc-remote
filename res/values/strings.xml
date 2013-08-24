@@ -126,4 +126,8 @@
     
     <!-- Content description for hotkeys menu -->
     <string name="hotkeys">Hotkeys</string>
+    
+    <!-- Menu item to shutdown the computer executing VLC -->
+    <string name="shutdown">Shutdown Computer</string>
+    <string name="confirm_shutdown">Are you sure?</string>
 </resources>

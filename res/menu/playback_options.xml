@@ -36,5 +36,6 @@
         android:id="@+id/menu_preferences"
         android:title="@string/settings"
         android:icon="@drawable/ic_menu_preferences"
-        android:showAsAction="ifRoom|withText" />
+        android:showAsAction="ifRoom|withText" /><item android:id="@+id/menu_shutdown" android:title="@string/shutdown" android:showAsAction="never"></item>
+    
 </menu>

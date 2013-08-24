@@ -105,6 +105,13 @@ final class StatusContentHandler extends XmlContentHandler<Status> {
                 mStatus.setFullscreen(fullscreen);
             }
         });
+        root.getChild("", "allowshutdown").setEndTextElementListener(new EndTextElementListener() {
+            /** {@inheritDoc} */
+            public void end(String body) {
+                boolean allowShutdown = parseBoolean(body);
+                mStatus.setAllowShutdown(allowShutdown);
+            }
+        });
         root.getChild("", "random").setEndTextElementListener(new EndTextElementListener() {
             /** {@inheritDoc} */
             public void end(String body) {

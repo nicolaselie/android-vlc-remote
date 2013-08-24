@@ -16,10 +16,13 @@
  */
 package org.peterbaldwin.vlcremote.app;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
 import org.peterbaldwin.client.android.vlcremote.R;
 import org.peterbaldwin.vlcremote.net.MediaServer;
 

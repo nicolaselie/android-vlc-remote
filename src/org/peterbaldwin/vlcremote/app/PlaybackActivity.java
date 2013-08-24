@@ -17,9 +17,11 @@
 
 package org.peterbaldwin.vlcremote.app;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
@@ -41,7 +43,9 @@ import android.widget.ImageButton;
 import android.widget.SlidingDrawer;
 import android.widget.TabHost;
 import android.widget.ViewFlipper;
+
 import java.util.ArrayList;
+
 import org.peterbaldwin.client.android.vlcremote.R;
 import org.peterbaldwin.vlcremote.fragment.ArtFragment;
 import org.peterbaldwin.vlcremote.fragment.BottomActionbarFragment;
@@ -264,6 +268,8 @@ public class PlaybackActivity extends FragmentActivity implements TabHost.OnTabC
         super.onPrepareOptionsMenu(menu);
         String tabId = mTabHost != null ? mTabHost.getCurrentTabTag() : null;
         boolean visible = tabId == null || TAB_MEDIA.equals(tabId);
+        boolean allowShutdown = mPlayback != null ? mPlayback.allowShutdown() : false;
+        menu.findItem(R.id.menu_shutdown).setVisible(visible && allowShutdown);
         menu.findItem(R.id.menu_preferences).setVisible(visible);
         menu.findItem(R.id.menu_help).setVisible(visible);
         menu.setGroupVisible(R.id.group_vlc_actions, visible);
@@ -298,6 +304,18 @@ public class PlaybackActivity extends FragmentActivity implements TabHost.OnTabC
                 return true;
             case R.id.menu_playlist_cycle_aspect_ratio:
                 mMediaServer.status().command.key("aspect-ratio");
+                return true;
+            case R.id.menu_shutdown:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.shutdown);
+                builder.setMessage(R.string.confirm_shutdown);
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {                    
+                        mMediaServer.status().command.shutdown();
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, null);
+                builder.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

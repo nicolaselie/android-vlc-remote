@@ -29,6 +29,7 @@ public final class Status implements Serializable {
     private String mState;
     private double mPosition;
     private boolean mFullscreen;
+    private boolean mAllowShutdown;
     private boolean mRandom;
     private boolean mLoop;
     private boolean mRepeat;
@@ -75,6 +76,10 @@ public final class Status implements Serializable {
 
     public boolean isFullscreen() {
         return mFullscreen;
+    }
+    
+    public boolean allowShutdown() {
+        return mAllowShutdown;
     }
 
     public boolean isRandom() {
@@ -127,5 +132,9 @@ public final class Status implements Serializable {
 
     public Track getTrack() {
         return mTrack;
+    }
+
+    public void setAllowShutdown(boolean allowShutdown) {
+        mAllowShutdown = allowShutdown;
     }
 }

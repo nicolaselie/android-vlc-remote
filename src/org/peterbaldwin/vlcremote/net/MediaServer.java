@@ -382,6 +382,10 @@ public final class MediaServer {
             public void fullscreen() {
                 execute("command=fullscreen");
             }
+            
+            public void shutdown() {
+                execute("command=shutdown");
+            }
 
             public void snapshot() {
                 execute("command=snapshot");

@@ -68,6 +68,8 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener,
     private TextView mTextLength;
 
     private MediaServer mMediaServer;
+    
+    private boolean mAllowShutdown;
 
     public void setMediaServer(MediaServer server) {
         mMediaServer = server;
@@ -189,6 +191,8 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener,
 
         String formattedLength = formatTime(length);
         mTextLength.setText(formattedLength);
+        
+        mAllowShutdown = status.allowShutdown();
     }
 
     private static void doubleDigit(StringBuilder builder, long value) {
@@ -196,6 +200,10 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener,
         if (value < 10) {
             builder.insert(0, '0');
         }
+    }
+    
+    public boolean allowShutdown() {
+        return mAllowShutdown;
     }
 
     /**
