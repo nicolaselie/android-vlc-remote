@@ -26,6 +26,9 @@ public final class Directory extends ArrayList<File> implements Comparator<File>
     public static final String UNIX_DIRECTORY = "/";
     public static final String WINDOWS_ROOT_DIRECTORY = "";
     public static String ROOT_DIRECTORY = UNIX_DIRECTORY;
+    private String mSortCriteria = "";
+    private int mSortOrder = 1;
+    private boolean mDirSort = false;
 
     public Directory() {
     }
@@ -61,11 +64,25 @@ public final class Directory extends ArrayList<File> implements Comparator<File>
         }
         return ROOT_DIRECTORY;
     }
+    
+    /**
+     * Set sorting parameters for future sort with compare
+     * @param sortCriteria can be "size", "name" or "date" to sort by file size,
+     * file name or file date
+     * @param sortOrder +1 to sort in increasing order or -1 for decreasing order
+     * @param dirSort if true, directories will be listed before files
+     */
+    public void setSorting(String sortCriteria, int sortOrder, boolean dirSort) {
+        mSortCriteria = sortCriteria;
+        mSortOrder = sortOrder;
+        mDirSort = dirSort;
+    }
 
     /**
      * Compares two Files that are to be sorted with directories being displayed
-     * before files. The parent entry will be first if present, then the
-     * directories and then files.
+     * before files (if mDirSort is true). The parent entry will be first if present, 
+     * then the directories and then files.
+     * if mSortCriteria is defined, files will be sorted by size, name or date.
      * @param firstFile
      * @param secondFile
      * @return a negative integer, zero, or a positive integer as the first 
@@ -82,15 +99,30 @@ public final class Directory extends ArrayList<File> implements Comparator<File>
         if(secondFile.isDirectory() && secondFile.isParent()) {
             return 1;
         }
-        // then directories next
-        if(firstFile.isDirectory() && !secondFile.isDirectory()) {
-            return -1;
-        }
-        if(secondFile.isDirectory() && !firstFile.isDirectory()) {
-            return 1;
+            
+        if (mDirSort) {
+            // then directories next
+            if(firstFile.isDirectory() && !secondFile.isDirectory()) {
+                return -1;
+            }
+            if(secondFile.isDirectory() && !firstFile.isDirectory()) {
+                return 1;
+            }
         }
         // then files
-        return firstFile.getName().compareTo(secondFile.getName());
+        if ("size".equals(mSortCriteria)) {
+            return mSortOrder * firstFile.getSize().compareTo(secondFile.getSize());
+        }
+        if ("date".equals(mSortCriteria)) {
+            if ((firstFile.getDate() == null) || (secondFile.getDate() == null)) {
+                return 0;
+            }
+            else {
+                return mSortOrder * firstFile.getDate().compareTo(secondFile.getDate());
+            }
+        }
+        return mSortOrder * firstFile.getName().compareToIgnoreCase(secondFile.getName());
+        
     }
     
 }

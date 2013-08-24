@@ -27,6 +27,13 @@
             <item android:id="@+id/menu_size_large" android:title="@string/size_large"></item>
         </menu>
     </item>
+    <item android:id="@+id/menu_sort" android:title="@string/sort" android:showAsAction="always|withText" android:icon="@drawable/ic_menu_sort_by">
+        <menu>
+            <item android:id="@+id/menu_sort_by_date" android:title="@string/sort_by_date" android:checkable="false"/>
+            <item android:id="@+id/menu_sort_by_name" android:title="@string/sort_by_name" android:checkable="false"/>
+            <item android:id="@+id/menu_sort_by_size" android:title="@string/sort_by_size" android:checkable="false"/>
+        </menu>
+    </item>
     <item
         android:id="@+id/menu_refresh"
         android:title="@string/refresh"

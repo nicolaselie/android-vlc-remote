@@ -42,6 +42,9 @@ final class DirectoryContentHandler extends XmlContentHandler<Directory> {
             // Ignore unexpected value
         }
         String date = attributes.getValue("", "date");
+        if (date == null) {
+            date = attributes.getValue("", "modification_time");
+        }
         String path = attributes.getValue("", "path");
         String name = attributes.getValue("", "name");
         String extension = attributes.getValue("", "extension");

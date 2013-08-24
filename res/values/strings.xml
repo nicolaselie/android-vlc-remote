@@ -81,6 +81,10 @@
     <string name="size_small">Small Text</string>
     <string name="size_medium">Medium Text</string>
     <string name="size_large">Large Text</string>
+    <string name="sort">Sort</string>
+    <string name="sort_by_date">By Date</string>
+    <string name="sort_by_name">By Name</string>
+    <string name="sort_by_size">By Size</string>
     <string name="mediasearch">Search for %s using:</string>
     <string name="emptyplaylist">Playlist is empty.</string>
     <string name="noserver">Server not selected.</string>

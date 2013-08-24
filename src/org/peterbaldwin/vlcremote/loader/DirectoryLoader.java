@@ -29,11 +29,17 @@ public class DirectoryLoader extends ModelLoader<Remote<Directory>> {
     private final MediaServer mMediaServer;
 
     private final String mDir;
+    
+    private final String mSortCriteria;
+    
+    private final int mSortOrder;
 
-    public DirectoryLoader(Context context, MediaServer mediaServer, String dir) {
+    public DirectoryLoader(Context context, MediaServer mediaServer, String dir, String sortCriteria, int sortOrder) {
         super(context);
         mMediaServer = mediaServer;
         mDir = dir;
+        mSortCriteria = sortCriteria;
+        mSortOrder = sortOrder;
     }
 
     @Override
@@ -41,7 +47,8 @@ public class DirectoryLoader extends ModelLoader<Remote<Directory>> {
         Remote<Directory> remote = mMediaServer.browse(mDir).load();
         if(remote.data != null) {
             boolean dirSort = Preferences.get(getContext()).isSortDirectoriesFirst();
-            if(dirSort) {
+            remote.data.setSorting(mSortCriteria, mSortOrder, dirSort);
+            if(dirSort || "size".equals(mSortCriteria) | "date".equals(mSortCriteria)) {
                 Collections.sort(remote.data, remote.data);
             }
         }

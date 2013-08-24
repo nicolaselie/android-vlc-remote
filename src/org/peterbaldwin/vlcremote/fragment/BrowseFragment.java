@@ -68,6 +68,10 @@ public class BrowseFragment extends ListFragment implements
     private MediaServer mMediaServer;
 
     private String mDirectory = "~";
+    
+    private String mSortCriteria = "";
+    
+    private int mSortOrder = 1;
 
     private Preferences mPreferences;
 
@@ -216,6 +220,21 @@ public class BrowseFragment extends ListFragment implements
                 mPreferences.setTextSize(Preferences.TEXT_SMALL);
                 mAdapter.notifyDataSetChanged();
                 return true;
+            case R.id.menu_sort_by_date:
+                mSortOrder = "date".equals(mSortCriteria) ? -mSortOrder : 1;
+                mSortCriteria = "date";
+                getLoaderManager().restartLoader(Data.DIRECTORY, Bundle.EMPTY, this);
+                return true;
+            case R.id.menu_sort_by_name:
+                mSortOrder = "name".equals(mSortCriteria) ? -mSortOrder : 1;
+                mSortCriteria = "name";
+                getLoaderManager().restartLoader(Data.DIRECTORY, Bundle.EMPTY, this);
+                return true;
+            case R.id.menu_sort_by_size:
+                mSortOrder = "size".equals(mSortCriteria) ? -mSortOrder : 1;
+                mSortCriteria = "size";
+                getLoaderManager().restartLoader(Data.DIRECTORY, Bundle.EMPTY, this);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -286,7 +305,7 @@ public class BrowseFragment extends ListFragment implements
         Context context = getActivity();
         mPreferences.setBrowseDirectory(mDirectory);
         setEmptyText(getText(R.string.loading));
-        return new DirectoryLoader(context, mMediaServer, mDirectory);
+        return new DirectoryLoader(context, mMediaServer, mDirectory, mSortCriteria, mSortOrder);
     }
 
     /** {@inheritDoc} */

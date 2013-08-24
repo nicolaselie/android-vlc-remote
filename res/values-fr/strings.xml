@@ -48,6 +48,14 @@
     <!-- Menu item to navigate to parent directory (condensed) -->
     <string name="menu_parent_condensed">Parent</string>
     <string name="menu_clear_playlist">Vider la liste</string>
+    <string name="menu_browse_text_size">Taille du texte</string>
+    <string name="size_small">Petit</string>
+    <string name="size_medium">Moyen</string>
+    <string name="size_large">Grand</string>
+    <string name="sort">Trier</string>
+    <string name="sort_by_date">Par date</string>
+    <string name="sort_by_name">Par nom</string>
+    <string name="sort_by_size">Par taille</string>
     <string name="mediasearch">Rechercher %s en utilisant :</string>
     <string name="emptyplaylist">Liste de lecture vide.</string>
     <string name="noserver">Serveur non sélectionné.</string>
