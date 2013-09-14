@@ -285,7 +285,8 @@ public class BrowseFragment extends ListFragment implements
                         mMediaServer.status().command.input.play(file.getMrl(), file.getOptions());
                         return true;
                     case R.id.browse_context_stream:
-                        mMediaServer.status().command.input.play(file.getMrl(),
+                        mMediaServer.vlm().command.input.delstream();
+                        mMediaServer.vlm().command.input.stream(file.getMrl(),
                                 file.getStreamingOptions());
                         Intent intent = file.getIntentForStreaming(mMediaServer.getAuthority());
                         startActivity(intent);

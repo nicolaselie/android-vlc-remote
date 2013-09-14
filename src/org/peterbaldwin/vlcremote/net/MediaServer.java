@@ -66,6 +66,14 @@ public final class MediaServer {
     public String getAuthority() {
         return mAuthority;
     }
+    
+    public VLMRequest vlm() {
+        return new VLMRequest(mContext, mAuthority);
+    }
+
+    public VLMRequest vlm(Uri uri) {
+        return new VLMRequest(mContext, uri);
+    }
 
     public StatusRequest status() {
         return new StatusRequest(mContext, mAuthority);
@@ -181,6 +189,50 @@ public final class MediaServer {
                 return (T) handler.getContent(http);
             } finally {
                 http.disconnect();
+            }
+        }
+    }
+    
+    public static final class VLMRequest extends Request {
+
+        VLMRequest(Context context, String authority) {
+            super(context, authority, "/requests/vlm_cmd.xml");
+        }
+        
+        public VLMRequest(Context context, Uri uri) {
+            super(context, uri);
+        }
+        
+        public final CommandInterface command = new CommandInterface();
+        
+        public final class CommandInterface {
+
+            public final InputInterface input = new InputInterface();
+
+            public class InputInterface {
+
+                private InputInterface() {
+                }
+                
+                public void delstream() {
+                    execute("command=" + Uri.encode("del stream.sdp"));
+                }
+
+                public void stream(String input) {
+                    List<String> options = Collections.emptyList();
+                    stream(input, options);
+                }
+
+                public void stream(String input, List<String> options) {
+                    String query="command=" 
+                            + Uri.encode("new stream.sdp vod enabled input \"" +
+                            input + "\" output ");
+                    for (String option : options) {
+                        query += Uri.encode(option);
+                    }
+
+                    execute(query);
+                }
             }
         }
     }

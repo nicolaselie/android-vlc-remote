@@ -176,9 +176,9 @@ public final class File {
         List<String> options = new ArrayList<String>(getOptions());
         String mimeType = getMimeType();
         if (mimeType != null && mimeType.startsWith("audio/")) {
-            options.add(":sout=#transcode{acodec=vorb,ab=128}:standard{access=http,mux=ogg,dst=0.0.0.0:8000}");
+            options.add("#transcode{acodec=mp3,ab=128}");
         } else {
-            options.add(":sout=#transcode{vcodec=mp4v,vb=384,acodec=mp4a,ab=64,channels=2,fps=25,venc=x264{profile=baseline,keyint=50,bframes=0,no-cabac,ref=1,vbv-maxrate=4096,vbv-bufsize=1024,aq-mode=0,no-mbtree,partitions=none,no-weightb,weightp=0,me=dia,subme=0,no-mixed-refs,no-8x8dct,trellis=0,level1.3},vfilter=canvas{width=320,height=180,aspect=320:180,padd},senc,soverlay}:rtp{sdp=rtsp://0.0.0.0:5554/stream.sdp,caching=4000}}");
+            options.add("#transcode{vcodec=mp4v,vb=384,acodec=mp4a,ab=64,channels=2,fps=25,venc=x264{profile=baseline,keyint=50,bframes=0,no-cabac,ref=1,vbv-maxrate=4096,vbv-bufsize=1024,aq-mode=0,no-mbtree,partitions=none,no-weightb,weightp=0,me=dia,subme=0,no-mixed-refs,no-8x8dct,trellis=0,level1.3},vfilter=canvas{width=320,height=180,aspect=320:180,padd},senc,soverlay}");
         }
         return options;
     }
@@ -186,19 +186,18 @@ public final class File {
     public Intent getIntentForStreaming(String authority) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         String mimeType = getMimeType();
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("rtsp");
+        builder.encodedAuthority(swapPortNumber(authority, 8554));
+        builder.path("stream.sdp");
+        Uri data = builder.build();
+        
         if (mimeType != null && mimeType.startsWith("audio/")) {
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("rtsp");
-            builder.encodedAuthority(swapPortNumber(authority, 5554));
-            builder.path("stream.sdp");
-            Uri data = builder.build();
-            intent.setData(data);
+            intent.setDataAndType(data, "audio/mp3");
+        } else if (mimeType != null && mimeType.startsWith("video/")) {
+            intent.setDataAndType(data, "video/mp4");
         } else {
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http");
-            builder.encodedAuthority(swapPortNumber(authority, 8000));
-            Uri data = builder.build();
-            intent.setDataAndType(data, "application/ogg");
+            intent.setData(data);
         }
         return intent;
     }

@@ -24,6 +24,7 @@ import org.peterbaldwin.vlcremote.net.MediaServer;
 import org.peterbaldwin.vlcremote.net.MediaServer.StatusRequest;
 import org.peterbaldwin.vlcremote.net.MediaServer.StatusRequest.CommandInterface;
 import org.peterbaldwin.vlcremote.net.MediaServer.StatusRequest.CommandInterface.PlaybackInterface;
+import org.peterbaldwin.vlcremote.net.MediaServer.VLMRequest;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -39,6 +40,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
 import org.peterbaldwin.vlcremote.model.Preferences;
 
 /**
@@ -102,6 +104,10 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener,
         return button;
     }
 
+    private VLMRequest vlm() {
+        return mMediaServer.vlm();
+    }
+    
     private StatusRequest status() {
         return mMediaServer.status();
     }
