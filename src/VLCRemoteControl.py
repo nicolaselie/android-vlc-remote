@@ -16,7 +16,8 @@ DEBUG = True
 
 VLC_PORT = 9090
 RTSP_PORT = 8554
-VLC_COMMAND = '--ttl 12 --qt-start-minimized --fullscreen --extraintf=luahttp --rtsp-host=0.0.0.0 --rtsp-port=%d --http-host=localhost --http-port=%d --sout-ffmpeg-strict=-2 --avi-index=2 --no-qt-error-dialogs --no-qt-privacy-ask' % (RTSP_PORT, VLC_PORT)
+VLC_PASSWORD = ''
+VLC_COMMAND = '--ttl 12 --qt-start-minimized --fullscreen --extraintf=luahttp --rtsp-host=0.0.0.0 --rtsp-port=%d --http-host=localhost --http-port=%d --avi-index=2 --no-qt-error-dialogs --no-qt-privacy-ask' % (RTSP_PORT, VLC_PORT)
 
 #Get command to launch VLC and to shutdown computer (platform specific)
 if sys.platform.startswith('win32'): #Windows
@@ -39,6 +40,9 @@ if sys.platform.startswith('linux'): #Linux, try to detect Desktop Environment (
     else: #LXDE, XFCE
         SHUTDOWN_COMMAND = 'dbus-send --system --print-reply --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop' #Quite dirty shutdown
 
+if DEBUG:
+    VLC_PASSWORD = 'admin'
+
 #Try to get VLC version
 try:
     p = subprocess.Popen([VLC_EXEC, "--version"], stdout=subprocess.PIPE)
@@ -46,6 +50,13 @@ try:
     VLC_VERSION = tuple([int(value) for value in version.split(b'.')])
 except:
     VLC_VERSION = (0, 0, 0)
+
+if VLC_VERSION >= (2, 1, 0): #Starting from VLC 2.1.0, a password must be specified with --http-password
+    if VLC_PASSWORD == '': #If a password was not set, generate a random one
+        import random
+        import string
+        VLC_PASSWORD = ''.join(random.SystemRandom().choice(string.printable) for _ in range(10))
+    VLC_COMMAND += ' --http-password=%s' % VLC_PASSWORD
 
 class RemoteControlServer(HTTPServer):
     def __init__(self, server_address, RequestHandlerClass):
@@ -55,6 +66,13 @@ class RemoteControlServer(HTTPServer):
             self.address = 'localhost'
         else:
             self.address = server_address[0]
+        
+        if VLC_VERSION >= (2, 1, 0):
+            password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+            password_mgr.add_password(None, "http://%s:%s" % (self.address, VLC_PORT), '', VLC_PASSWORD)
+            handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
+            opener = urllib.request.build_opener(handler)
+            urllib.request.install_opener(opener)
         
         HTTPServer.__init__(self, server_address, RequestHandlerClass)
         
