@@ -20,7 +20,6 @@ package org.peterbaldwin.vlcremote.fragment;
 import org.peterbaldwin.client.android.vlcremote.R;
 import org.peterbaldwin.vlcremote.intent.Intents;
 import org.peterbaldwin.vlcremote.model.Status;
-import org.peterbaldwin.vlcremote.net.MediaServer;
 import org.peterbaldwin.vlcremote.net.MediaServer.StatusRequest;
 import org.peterbaldwin.vlcremote.net.MediaServer.StatusRequest.CommandInterface;
 import org.peterbaldwin.vlcremote.net.MediaServer.StatusRequest.CommandInterface.PlaybackInterface;
@@ -32,7 +31,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +44,7 @@ import org.peterbaldwin.vlcremote.model.Preferences;
 /**
  * Controls playback and displays progress.
  */
-public class PlaybackFragment extends Fragment implements View.OnClickListener,
+public class PlaybackFragment extends MediaFragment implements View.OnClickListener,
         OnSeekBarChangeListener {
 
     private BroadcastReceiver mStatusReceiver;
@@ -68,14 +66,8 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener,
     private TextView mTextTime;
 
     private TextView mTextLength;
-
-    private MediaServer mMediaServer;
     
     private boolean mAllowShutdown;
-
-    public void setMediaServer(MediaServer server) {
-        mMediaServer = server;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,7 +101,7 @@ public class PlaybackFragment extends Fragment implements View.OnClickListener,
     }
     
     private StatusRequest status() {
-        return mMediaServer.status();
+        return getMediaServer().status();
     }
 
     private CommandInterface command() {

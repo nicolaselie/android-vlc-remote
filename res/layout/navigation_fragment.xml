@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <TextView
-        android:layout_width="fill_parent"
+    <CheckBox android:id="@+id/pager_lock"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/experimental"
-        android:gravity="center"
+        android:text="@string/lock_pager"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:onClick="toggleViewPagerLock"
         android:layout_margin="8dp" />
     <TextView
         android:layout_width="fill_parent"
@@ -18,9 +18,12 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/dvd_instructions"
         android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_margin="8dp" />
     <android.gesture.GestureOverlayView
         android:id="@+id/overlay"
+        android:layout_below="@id/pager_lock"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
-</FrameLayout>
+</RelativeLayout>
